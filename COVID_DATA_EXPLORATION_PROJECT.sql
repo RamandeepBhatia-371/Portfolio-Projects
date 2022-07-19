@@ -1,4 +1,4 @@
---SQL Data Expoloration for datasets Covid Deaths Until now and People who got vaccinated till date. 
+--SQL Data Expoloration for datasets Covid Deaths until now and People who got vaccinated till date. 
 
 Select *
 From PortfolioProject.dbo.CovidDeaths
