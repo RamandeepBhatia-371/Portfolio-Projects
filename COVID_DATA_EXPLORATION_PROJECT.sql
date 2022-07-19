@@ -1,4 +1,6 @@
 --SQL Data Expoloration for datasets Covid Deaths until now and People who got vaccinated till date. 
+--Worked on Tableau for data visualization and dasboard.
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 Select *
 From PortfolioProject.dbo.CovidDeaths
