@@ -1,3 +1,5 @@
+--SQL Data Expoloration 
+
 Select *
 From PortfolioProject.dbo.CovidDeaths
 Where continent is not null
