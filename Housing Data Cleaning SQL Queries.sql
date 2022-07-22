@@ -4,27 +4,30 @@ Cleaning Data in SQL Queries
 
 
 Select *
-From PortfolioProject.dbo.NashvilleHousing
+From PortfolioProject.dbo.HousingData
 
 --------------------------------------------------------------------------------------------------------------------------
 
 -- Standardize Date Format
 
 
-Select saleDateConverted, CONVERT(Date,SaleDate)
-From PortfolioProject.dbo.NashvilleHousing
+--Select saleDateConverted, CONVERT(Date,SaleDate)
+--From PortfolioProject.dbo.HousingData
 
 
-Update NashvilleHousing
-SET SaleDate = CONVERT(Date,SaleDate)
+--Update HousingData
+--SET SaleDate = CONVERT(Date,SaleDate)
 
 -- If it doesn't Update properly
 
-ALTER TABLE NashvilleHousing
-Add SaleDateConverted Date;
+--ALTER TABLE HousingData
+--Add SaleDateConverted Date;
 
-Update NashvilleHousing
-SET SaleDateConverted = CONVERT(Date,SaleDate)
+--Update HousingData
+--SET SaleDateConverted = CONVERT(Date,SaleDate)
+
+ALTER TABLE HousingData
+ALTER COLUMN SaleDate Date
 
 
  --------------------------------------------------------------------------------------------------------------------------
@@ -32,24 +35,25 @@ SET SaleDateConverted = CONVERT(Date,SaleDate)
 -- Populate Property Address data
 
 Select *
-From PortfolioProject.dbo.NashvilleHousing
---Where PropertyAddress is null
+From PortfolioProject.dbo.HousingData
+Where PropertyAddress is null
 order by ParcelID
 
 
 
 Select a.ParcelID, a.PropertyAddress, b.ParcelID, b.PropertyAddress, ISNULL(a.PropertyAddress,b.PropertyAddress)
-From PortfolioProject.dbo.NashvilleHousing a
-JOIN PortfolioProject.dbo.NashvilleHousing b
+From PortfolioProject.dbo.HousingData a
+JOIN PortfolioProject.dbo.HousingData b
 	on a.ParcelID = b.ParcelID
 	AND a.[UniqueID ] <> b.[UniqueID ]
 Where a.PropertyAddress is null
 
-
+--using the alias when updating and joining the attributes
 Update a
+--SET PropertyAddress = ISNULL(a.PropertyAddress,'NO ADDRESS') if you want to use or if there is no address mentioned.
 SET PropertyAddress = ISNULL(a.PropertyAddress,b.PropertyAddress)
-From PortfolioProject.dbo.NashvilleHousing a
-JOIN PortfolioProject.dbo.NashvilleHousing b
+From PortfolioProject.dbo.HousingData a
+JOIN PortfolioProject.dbo.HousingData b
 	on a.ParcelID = b.ParcelID
 	AND a.[UniqueID ] <> b.[UniqueID ]
 Where a.PropertyAddress is null
@@ -63,77 +67,84 @@ Where a.PropertyAddress is null
 
 
 Select PropertyAddress
-From PortfolioProject.dbo.NashvilleHousing
+From PortfolioProject.dbo.HousingData
 --Where PropertyAddress is null
 --order by ParcelID
+--here CHARINDEX Specifies the location of character ','. It could be anything like 'a' or 'f'.
+--Substring is any string you want to break out into two or three by the delimiter(Such as ',') and at second postion 1 denoted the location.
 
 SELECT
-SUBSTRING(PropertyAddress, 1, CHARINDEX(',', PropertyAddress) -1 ) as Address
-, SUBSTRING(PropertyAddress, CHARINDEX(',', PropertyAddress) + 1 , LEN(PropertyAddress)) as Address
-
-From PortfolioProject.dbo.NashvilleHousing
+SUBSTRING(PropertyAddress, 1, CHARINDEX(',', PropertyAddress) -1) as Address,
+SUBSTRING(PropertyAddress, CHARINDEX(',', PropertyAddress) +1, LEN(PropertyAddress)) as Address
 
 
-ALTER TABLE NashvilleHousing
+
+From PortfolioProject.dbo.HousingData
+
+--Making new columns for split address.
+
+ALTER TABLE HousingData
 Add PropertySplitAddress Nvarchar(255);
 
-Update NashvilleHousing
+Update HousingData
 SET PropertySplitAddress = SUBSTRING(PropertyAddress, 1, CHARINDEX(',', PropertyAddress) -1 )
 
 
-ALTER TABLE NashvilleHousing
+ALTER TABLE HousingData
 Add PropertySplitCity Nvarchar(255);
 
-Update NashvilleHousing
+Update HousingData
 SET PropertySplitCity = SUBSTRING(PropertyAddress, CHARINDEX(',', PropertyAddress) + 1 , LEN(PropertyAddress))
 
 
 
 
 Select *
-From PortfolioProject.dbo.NashvilleHousing
+From PortfolioProject.dbo.HousingData
 
 
 
 
 
 Select OwnerAddress
-From PortfolioProject.dbo.NashvilleHousing
+From PortfolioProject.dbo.HousingData
 
 
+--The easiest way to split address or any column with delimiter using PARSENAME
+--Parse Name works for only periods '.' but we can change the delimiter by putting it(Using REPLACE) but it shows the location backward
 Select
 PARSENAME(REPLACE(OwnerAddress, ',', '.') , 3)
 ,PARSENAME(REPLACE(OwnerAddress, ',', '.') , 2)
 ,PARSENAME(REPLACE(OwnerAddress, ',', '.') , 1)
-From PortfolioProject.dbo.NashvilleHousing
+From PortfolioProject.dbo.HousingData
 
 
 
-ALTER TABLE NashvilleHousing
+ALTER TABLE HousingData
 Add OwnerSplitAddress Nvarchar(255);
 
-Update NashvilleHousing
+Update HousingData
 SET OwnerSplitAddress = PARSENAME(REPLACE(OwnerAddress, ',', '.') , 3)
 
 
-ALTER TABLE NashvilleHousing
+ALTER TABLE HousingData
 Add OwnerSplitCity Nvarchar(255);
 
-Update NashvilleHousing
+Update HousingData
 SET OwnerSplitCity = PARSENAME(REPLACE(OwnerAddress, ',', '.') , 2)
 
 
 
-ALTER TABLE NashvilleHousing
+ALTER TABLE HousingData
 Add OwnerSplitState Nvarchar(255);
 
-Update NashvilleHousing
+Update HousingData
 SET OwnerSplitState = PARSENAME(REPLACE(OwnerAddress, ',', '.') , 1)
 
 
 
 Select *
-From PortfolioProject.dbo.NashvilleHousing
+From PortfolioProject.dbo.HousingData
 
 
 
@@ -143,9 +154,9 @@ From PortfolioProject.dbo.NashvilleHousing
 
 -- Change Y and N to Yes and No in "Sold as Vacant" field
 
-
+--Distinct is used to diffrentiate the diffrent words used for SoldasVacant yes no's.
 Select Distinct(SoldAsVacant), Count(SoldAsVacant)
-From PortfolioProject.dbo.NashvilleHousing
+From PortfolioProject.dbo.HousingData
 Group by SoldAsVacant
 order by 2
 
@@ -157,10 +168,10 @@ Select SoldAsVacant
 	   When SoldAsVacant = 'N' THEN 'No'
 	   ELSE SoldAsVacant
 	   END
-From PortfolioProject.dbo.NashvilleHousing
+From PortfolioProject.dbo.HousingData
+--Dont forget to update after any changes after using alter or select commands.
 
-
-Update NashvilleHousing
+Update HousingData
 SET SoldAsVacant = CASE When SoldAsVacant = 'Y' THEN 'Yes'
 	   When SoldAsVacant = 'N' THEN 'No'
 	   ELSE SoldAsVacant
@@ -174,6 +185,28 @@ SET SoldAsVacant = CASE When SoldAsVacant = 'Y' THEN 'Yes'
 -----------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- Remove Duplicates
+--To know how many duplicates are there
+WITH RowNumCTE AS(
+Select *,
+	ROW_NUMBER() OVER (
+	PARTITION BY ParcelID,
+				 PropertyAddress,
+				 SalePrice,
+				 SaleDate,
+				 LegalReference
+				 ORDER BY
+					UniqueID
+					) row_num
+
+From PortfolioProject.dbo.HousingData
+--order by ParcelID
+)
+Select *
+From RowNumCTE
+Where row_num > 1
+Order by PropertyAddress
+
+--To delete
 
 WITH RowNumCTE AS(
 Select *,
@@ -187,18 +220,17 @@ Select *,
 					UniqueID
 					) row_num
 
-From PortfolioProject.dbo.NashvilleHousing
+From PortfolioProject.dbo.HousingData
 --order by ParcelID
 )
-Select *
+DELETE --you can just use this after CTE for pulliing the duplicates
 From RowNumCTE
 Where row_num > 1
-Order by PropertyAddress
-
+--Order by PropertyAddress
 
 
 Select *
-From PortfolioProject.dbo.NashvilleHousing
+From PortfolioProject.dbo.HousingData
 
 
 
@@ -210,11 +242,11 @@ From PortfolioProject.dbo.NashvilleHousing
 
 
 Select *
-From PortfolioProject.dbo.NashvilleHousing
+From PortfolioProject.dbo.HousingData
 
 
-ALTER TABLE PortfolioProject.dbo.NashvilleHousing
-DROP COLUMN OwnerAddress, TaxDistrict, PropertyAddress, SaleDate
+ALTER TABLE PortfolioProject.dbo.HousingData
+DROP COLUMN OwnerAddress, TaxDistrict, PropertyAddress
 
 
 
