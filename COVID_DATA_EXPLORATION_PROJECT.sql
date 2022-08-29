@@ -23,7 +23,7 @@ Where location like '%Indi%'
 Order by 1,2
 
 --Looking at Total Cases vs Population
---What percentage of population infected by covid
+--What percentage of population infected by covid-19
 
 Select location, date, population, total_cases, (total_cases/population)*100 as case_percentage
 From PortfolioProject.dbo.CovidDeaths
