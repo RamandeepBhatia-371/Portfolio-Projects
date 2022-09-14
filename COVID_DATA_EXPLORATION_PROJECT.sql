@@ -30,7 +30,7 @@ From PortfolioProject.dbo.CovidDeaths
 Where location like '%Indi%'
 Order by 1,2
 
---Lookin at countries with highest number of infected rate compared to total population
+--Looking at countries with highest number of infected rate compared to total population
 Select location, population, MAX(total_cases) as highestInfectionCount, MAX((total_cases/population))*100 as case_percentage
 From PortfolioProject.dbo.CovidDeaths
 Group by location, population
