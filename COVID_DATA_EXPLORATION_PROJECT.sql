@@ -43,7 +43,7 @@ Where continent is not null
 Group by location
 Order by TotalDeathCount desc
 
---Continent with the highest death count per population
+--Continents with the highest death count per population
 Select continent, MAX(cast(total_deaths as int)) as TotalDeathCount
 From PortfolioProject.dbo.CovidDeaths
 Where continent is not null
