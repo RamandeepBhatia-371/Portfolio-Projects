@@ -16,7 +16,7 @@ From PortfolioProject.dbo.CovidDeaths
 Order by 1,2
 
 --Looking at Total Cases vs Total Deaths
---Likehood to die if you infected by covid in your country
+--People Likehood to die if you infected by covid in your country
 Select location, date, total_cases, total_deaths, (total_deaths/total_cases)*100 as Death_percentage
 From PortfolioProject.dbo.CovidDeaths
 Where location like '%Indi%'
