@@ -57,7 +57,7 @@ Where continent is not null
 --Group by date
 Order by 1,2
 
--- Total population vs Total vaccinated
+-- Total population vs Total People vaccinated
 Select dea.continent , dea.location, dea.date, dea.population, vac.new_vaccinations,
 SUM(CONVERT(bigint,vac.new_vaccinations)) OVER (Partition by dea.location order by dea.location, dea.date) as Rollingpeoplevaccinated
 From PortfolioProject.dbo.CovidDeaths dea
