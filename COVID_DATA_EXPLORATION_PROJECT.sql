@@ -1,5 +1,5 @@
 --SQL Data Expoloration for datasets Covid Deaths until now and People who got vaccinated till date. 
---I worked on Tableau desktop for data visualization and dasboard.
+--Worked on Tableau desktop for data visualization and dasboard.
 ------------------------------------------------------------------------------------------------------------------
 
 Select *
