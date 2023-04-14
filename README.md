@@ -24,7 +24,7 @@ The COVID-19 Analysis project aims to provide insights into the ongoing pandemic
 - Calculating summary statistics and generating visualizations using SQL.
 - Conducting time-series analysis and trend analysis using SQL.
 
-# 2. Correlation between Budget and Gross Earnings of Movies
+## 2. Correlation between Budget and Gross Earnings of Movies Using Python
 - This is a Python project that explores the relationship between the budget and gross earnings of movies using Kaggle Movies Data. The project utilizes Python libraries such as Pandas, Matplotlib, and NumPy for data manipulation, visualization, and analysis.
 ## Project Description
 The main objective of this project is to analyze the correlation between the budget and gross earnings of movies using the Kaggle Movies Data. The dataset contains information about various movies, including their budgets, gross earnings, and other relevant details. The project includes the following steps:
