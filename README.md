@@ -33,7 +33,7 @@ The main objective of this project is to analyze the correlation between the bud
 - Correlation Matrix: The project also includes code to create a correlation matrix using the Pandas corr() method. The correlation matrix is a matrix that shows the correlation coefficients between multiple pairs of variables in a DataFrame. It provides a comprehensive overview of the correlations between different variables in the dataset, allowing for a deeper analysis of the relationships.
 - Correlation Analysis: The project interprets the calculated correlation coefficient and correlation matrix in terms of the strength and direction of the relationship between the budget and gross earnings of movies. It discusses whether the variables have a strong or weak correlation, and whether the relationship is positive or negative.
 - Visualization: The project uses Matplotlib, a popular data visualization library in Python, to create scatter plots and other types of plots that visualize the relationship between the budget and gross earnings of movies. These visualizations provide insights into the correlation between the variables and help in better understanding the data.
-## This project requires the following Python libraries:
+## The Python libraries used:
 - Pandas
 - Matplotlib
 - NumPy
