@@ -45,8 +45,8 @@ This project uses the Kaggle Movies Data, which is a publicly available dataset.
 
 ## Goals
 The main goals of this project were:
-- Identified and correcting errors in the housing data, including incorrect values, inconsistent formatting, and invalid entries.
-- Identified and removing duplicate entries, ensuring that each property is represented only once in the cleaned dataset.
+- Identifying and correcting errors in the housing data, including incorrect values, inconsistent formatting, and invalid entries.
+- Identifying and removing duplicate entries, ensuring that each property is represented only once in the cleaned dataset.
 - Handling missing values by either imputing them based on appropriate methods or removing rows with missing data, as applicable.
 - Addressing structural errors, such as inconsistencies in data types, formats, or units across different columns or tables.
 - Identifying and correcting inaccuracies in the housing data, such as outliers or data entry mistakes, to ensure the accuracy and reliability of the dataset.
