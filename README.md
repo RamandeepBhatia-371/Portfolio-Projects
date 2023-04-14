@@ -24,3 +24,19 @@ The COVID-19 Analysis project aims to provide insights into the ongoing pandemic
 - Calculating summary statistics and generating visualizations using SQL.
 - Conducting time-series analysis and trend analysis using SQL.
 
+# Correlation between Budget and Gross Earnings of Movies
+- This is a Python project that explores the relationship between the budget and gross earnings of movies using Kaggle Movies Data. The project utilizes Python libraries such as Pandas, Matplotlib, and NumPy for data manipulation, visualization, and analysis.
+## Project Description
+The main objective of this project is to analyze the correlation between the budget and gross earnings of movies using the Kaggle Movies Data. The dataset contains information about various movies, including their budgets, gross earnings, and other relevant details. The project includes the following steps:
+- Data Loading and Preprocessing: The Kaggle Movies Data is loaded into a Pandas DataFrame, and necessary preprocessing steps are performed, such as handling missing values, converting data types, and filtering relevant columns.
+-Correlation Calculation: The project uses the Pandas corr() method to calculate the Pearson correlation coefficient between the budget and gross earnings columns in the DataFrame. The Pearson correlation coefficient is a measure of the linear relationship between two variables, with values ranging from -1 to 1. A positive value indicates a positive correlation, while a negative value indicates a negative correlation.
+- Correlation Matrix: The project also includes code to create a correlation matrix using the Pandas corr() method. The correlation matrix is a matrix that shows the correlation coefficients between multiple pairs of variables in a DataFrame. It provides a comprehensive overview of the correlations between different variables in the dataset, allowing for a deeper analysis of the relationships.
+- Correlation Analysis: The project interprets the calculated correlation coefficient and correlation matrix in terms of the strength and direction of the relationship between the budget and gross earnings of movies. It discusses whether the variables have a strong or weak correlation, and whether the relationship is positive or negative.
+- Visualization: The project uses Matplotlib, a popular data visualization library in Python, to create scatter plots and other types of plots that visualize the relationship between the budget and gross earnings of movies. These visualizations provide insights into the correlation between the variables and help in better understanding the data.
+## This project requires the following Python libraries:
+- Pandas
+- Matplotlib
+- NumPy
+## Acknowledgements
+This project uses the Kaggle Movies Data, which is a publicly available dataset. The dataset can be found at the following link: https://www.kaggle.com/rounakbanik/the-movies-dataset
+
