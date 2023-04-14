@@ -40,7 +40,7 @@ The main objective of this project is to analyze the correlation between the bud
 ## Acknowledgements
 This project uses the Kaggle Movies Data, which is a publicly available dataset. The dataset can be found at the following link: https://www.kaggle.com/rounakbanik/the-movies-dataset
 
-# Project 3. Housing Data Cleaning Project
+## Project 3. Housing Data Cleaning Project
 - This project involved cleaning housing data using SQL to remove errors, duplicates, missing values, structural errors, and inaccuracies. The dataset contains information about various properties, such as property type, location, price, size, and other relevant details.
 
 ## Goals
