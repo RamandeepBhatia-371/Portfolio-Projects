@@ -40,3 +40,26 @@ The main objective of this project is to analyze the correlation between the bud
 ## Acknowledgements
 This project uses the Kaggle Movies Data, which is a publicly available dataset. The dataset can be found at the following link: https://www.kaggle.com/rounakbanik/the-movies-dataset
 
+# Project 3. Housing Data Cleaning Project
+- This project involved cleaning housing data using SQL to remove errors, duplicates, missing values, structural errors, and inaccuracies. The dataset contains information about various properties, such as property type, location, price, size, and other relevant details.
+
+## Goals
+The main goals of this project were:
+- Identified and correcting errors in the housing data, including incorrect values, inconsistent formatting, and invalid entries.
+- Identified and removing duplicate entries, ensuring that each property is represented only once in the cleaned dataset.
+- Handling missing values by either imputing them based on appropriate methods or removing rows with missing data, as applicable.
+- Addressing structural errors, such as inconsistencies in data types, formats, or units across different columns or tables.
+- Identifying and correcting inaccuracies in the housing data, such as outliers or data entry mistakes, to ensure the accuracy and reliability of the dataset.
+## Methodology
+The following steps I have followed to clean the housing data using SQL:
+- Data Assessment: Conducting a thorough assessment of the dataset to identify errors, duplicates, missing values, structural errors, and inaccuracies.
+- Data Cleaning: Using SQL queries to correct errors, remove duplicates, handle missing values, address structural errors, and correct inaccuracies in the housing data.
+- Data Validation: Validating the cleaned dataset to ensure that it meets the quality and accuracy requirements of the project.
+- Documentation: Creating documentation that outlines the steps taken in the data cleaning process, the decisions made, and the results obtained, to facilitate reproducibility and future reference.
+## Deliverables
+The final deliverables of this project was:
+- A cleaned and validated housing dataset in SQL format, free from errors, duplicates, missing values, structural errors, and inaccuracies.
+- Documentation summarizing the data cleaning process, including the steps taken, decisions made, and results obtained, for future reference.
+Any additional insights or recommendations based on the findings during the data cleaning process.
+Conclusion
+- The housing data cleaning project using SQL aims to ensure that the dataset is accurate, reliable, and ready for further analysis or modeling. By addressing errors, duplicates, missing values, structural errors, and inaccuracies in the data, this project will result in a cleaned dataset that can be used for various purposes, such as statistical analysis, predictive modeling, or data visualization.
