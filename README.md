@@ -1,6 +1,6 @@
 # Portfolio-Projects-Data-Analytics
 
-## 1. COVID-19 Analysis (Using SQL and Tableau)
+## Project 1. COVID-19 Analysis (Using SQL and Tableau)
 This is a GitHub project that provides an analysis of the COVID-19 pandemic using SQL. The project utilizes SQL queries to analyze and visualize various aspects of the pandemic, including the spread of the virus, its impact on different populations, and trends over time. The project includes SQL scripts, data, and documentation to support reproducibility and transparency. Please check this link for Viz. on Tableau : https://public.tableau.com/app/profile/ramandeep.bhatia/viz/CovidCasesDashboard_16581942656400/Dashboard1
 - Project Overview
 - Data Sources
@@ -24,7 +24,7 @@ The COVID-19 Analysis project aims to provide insights into the ongoing pandemic
 - Calculating summary statistics and generating visualizations using SQL.
 - Conducting time-series analysis and trend analysis using SQL.
 
-## 2. Correlation between Budget and Gross Earnings of Movies Using Python
+## Project 2. Correlation between Budget and Gross Earnings of Movies Using Python
 - This is a Python project that explores the relationship between the budget and gross earnings of movies using Kaggle Movies Data. The project utilizes Python libraries such as Pandas, Matplotlib, and NumPy for data manipulation, visualization, and analysis.
 ## Project Description
 The main objective of this project is to analyze the correlation between the budget and gross earnings of movies using the Kaggle Movies Data. The dataset contains information about various movies, including their budgets, gross earnings, and other relevant details. The project includes the following steps:
