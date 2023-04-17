@@ -1,0 +1,423 @@
+---
+title: "Data Analysis Bellabeat Using R"
+output:
+  html_document:
+    df_print: paged
+  word_document: default
+  html_notebook: default
+---
+## About Company 
+Bellabeat, a high-tech manufacturer of health-focused products for women. Bellabeat is a successful small company, but they have the potential to become a larger player in the global
+smart device market.Urška Sršen, cofounder and Chief Creative Officer of Bellabeat believes that analyzing smart device fitness data could help unlock new growth opportunities for the company.
+
+## Products
+Bellabeat app: The Bellabeat app provides users with health data related to their activity, sleep, stress, menstrual cycle, and mindfulness habits. This data can help users better understand their current habits and make healthy decisions. The Bellabeat app connects to their line of smart wellness products.
+
+Leaf: Bellabeat’s classic wellness tracker can be worn as a bracelet, necklace, or clip. The Leaf tracker connects to the Bellabeat app to track activity, sleep, and stress.
+
+Time: This wellness watch combines the timeless look of a classic timepiece with smart technology to track user activity, sleep, and stress. The Time watch connects to the Bellabeat app to provide you with insights into your daily wellness.
+
+Spring: This is a water bottle that tracks daily water intake using smart technology to ensure that you are appropriately hydrated throughout the day. The Spring bottle connects to the Bellabeat app to track your hydration levels.
+
+Bellabeat membership: Bellabeat also offers a subscription-based membership program for users.
+Membership gives users 24/7 access to fully personalized guidance on nutrition, activity, sleep, health and beauty, and mindfulness based on their lifestyle and goals.
+
+## Questions For the Analysis
+1.What are some trends in smart device usage?
+2.How could these trends apply to Bellabeat customers?
+3.How could these trends help influence Bellabeat marketing strategy?
+
+## Business Task
+Identify and Analyze the trends in smart device usage and gain insights to improve the business objectives and goals regarding smart device usage by the consumers.
+
+## Loading Packages
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(lubridate)
+library(tidyr)
+```
+## Importing datasets
+For this project and analysis, I will use FitBit Fitness Tracker Datasets.
+
+```{r}
+DailySteps <- read.csv("dailySteps_merged.csv")
+DailyCalories <- read.csv("dailyCalories_merged.csv")
+DailyActivity <- read.csv("dailyActivity_merged.csv")
+HeartRateSeconds <- read.csv("heartrate_seconds_merged.csv")
+DailyIntensities <-read.csv("dailyIntensities_merged.csv")
+DailySleep <- read.csv("sleepDay_merged.csv")
+HourlyCalories <- read.csv("hourlyCalories_merged.csv")
+HourlySteps <- read.csv("hourlySteps_merged.csv")
+HourlyIntensities <- read.csv("hourlyIntensities_merged.csv")
+```
+-After this, i will make sure the data sets are correct and do not have any error or inaccuracy.I will use head() to see the columns of the data sets.
+```{r}
+glimpse(DailyActivity)
+```
+```{r}
+head(DailyActivity)
+```
+
+-I have noticed some inaccuracies in the datestamp format, the Date is <chr> in all data sets. I will change the formatting to Date time. 
+
+## Data Cleaning and manipulation:-
+
+## Formatting the Data
+```{r}
+# Convert "ActivityDate" to Date format in DailyActivity Dataset
+DailyActivity <- DailyActivity %>%
+  rename(date = ActivityDate) %>%
+  mutate(date = as_date(date, format = "%m/%d/%Y"))
+
+# Convert "SleepDay" to Date format in DailySleep Dataset
+DailySleep <- DailySleep %>%
+  rename(date = SleepDay) %>%
+  mutate(date = as_date(date,format ="%m/%d/%Y %I:%M:%S %p"))
+
+# Convert "ActivityDate" to Date format in DailySteps Dataset
+DailySteps <- DailySteps %>%
+  rename(date = ActivityDay) %>%
+  mutate(date = as_date(date,format ="%m/%d/%Y"))
+
+# Convert "ActivityDay" to Date format in DailyIntensities Dataset
+DailyIntensities <- DailyIntensities %>%
+  rename(date = ActivityDay) %>%
+  mutate(date = as_date(date,format ="%m/%d/%Y"))
+
+# Convert "ActivityDay" to Date format in DailyCalories Dataset
+DailyCalories <- DailyCalories %>%
+  rename(date = ActivityDay) %>%
+  mutate(date = as_date(date,format ="%m/%d/%Y"))
+
+# Convert "ActivityHour" to Date format in HourlySteps Dataset
+HourlySteps$ActivityHour = as.POSIXct(HourlySteps$ActivityHour, format="%m/%d/%Y %I:%M:%S %p", tz=Sys.timezone())
+HourlySteps$time <- format(HourlySteps$ActivityHour, format = "%H:%M:%S")
+HourlySteps$date <- format(HourlySteps$ActivityHour, format = "%m/%d/%y")
+
+# Convert "ActivityHour" to Date format in HourlyCalories Dataset
+HourlyCalories$ActivityHour = as.POSIXct(HourlyCalories$ActivityHour, format="%m/%d/%Y %I:%M:%S %p", tz=Sys.timezone())
+HourlyCalories$time <- format(HourlyCalories$ActivityHour, format = "%H:%M:%S")
+HourlyCalories$date <- format(HourlyCalories$ActivityHour, format = "%m/%d/%y")
+
+# Convert "ActivityHour" to Date format in HourlyIntensities Dataset
+HourlyIntensities$ActivityHour = as.POSIXct(HourlyIntensities$ActivityHour, format="%m/%d/%Y %I:%M:%S %p", tz=Sys.timezone())
+HourlyIntensities$time <- format(HourlyIntensities$ActivityHour, format = "%H:%M:%S")
+HourlyIntensities$date <- format(HourlyIntensities$ActivityHour, format = "%m/%d/%y")
+
+
+```
+
+-After formatting the data, I will conduct a thorough check for inaccuracies such as duplicate values and missing values, and take appropriate measures to address them, including removal of any duplicates.
+
+-I will specifically examine the data for any duplications in the IDs and take necessary actions to resolve them, if identified.
+
+
+## Remove Duplicates 
+```{r}
+n_distinct(DailyActivity$Id)
+n_distinct(DailyIntensities$Id)
+n_distinct(DailyCalories$Id)
+n_distinct(HourlyCalories$Id)
+n_distinct(HourlySteps$Id)
+n_distinct(HourlyIntensities$Id)
+```
+
+-Each table contains 33 unique Consumer IDs, indicating that the analysis has been tracked for a total of 33 consumers. This consistency across all tables is a positive indication of fairness in the data analysis.
+
+-I will now verify the total number of duplicates and NULL values, and proceed to remove any duplicate data entries.
+
+```{r}
+sum(duplicated(DailyActivity))
+sum(duplicated(DailyIntensities))
+sum(duplicated(DailyCalories))
+sum(duplicated(HourlyCalories))
+sum(duplicated(HourlySteps))
+sum(duplicated(HourlyIntensities))
+```
+
+-There are no duplicate data sets found in the data.
+
+-I will further explore the data by reviewing the summary of specific attributes in order to commence the analysis.
+
+```{r}
+#Total Steps Vs. Calories and Tracker Distance Vs. Logged Activity Distance
+DailyActivity %>%
+  select(TotalSteps, Calories, TrackerDistance, TotalDistance, LoggedActivitiesDistance) %>%
+  summary()
+
+#Sleep 
+DailySleep %>%
+  select(TotalSleepRecords,TotalTimeInBed, TotalMinutesAsleep) %>%
+  summary()
+
+#Different criteria of Active Minutes 
+DailyActivity %>%
+  select(VeryActiveMinutes, LightlyActiveMinutes, FairlyActiveMinutes) %>%
+  summary()
+
+#HourlyCalories
+HourlyCalories %>%
+  select(Calories) %>%
+  summary()
+
+#Intensities
+HourlyIntensities %>%
+  select(TotalIntensity, AverageIntensity) %>%
+  summary()
+
+#Hourly Steps
+HourlySteps %>%
+  select(StepTotal) %>%
+  summary()
+  
+```
+Summary Insights:
+-The consumer achieved higher results in Very Active Minutes and Lightly Active Minutes compared to Fairly Active Minutes, indicating that they may engage more in intense and light physical activities rather than moderate activities.
+
+-The Tracker Distance and Total Distance show identical figures, suggesting that the consumer's tracker accurately measures and records the total distance covered.
+
+-The Average Calories Per Day and Calories Per Hour could be positively indicated, implying that the consumer may have burned more calories on average per day and per hour, which could be viewed as a positive outcome in terms of their physical activity and energy expenditure.
+
+## Merge the datasets
+
+We will merge the data sets for correlation purpose based on the ID and Date
+```{r}
+Activity_Sleep_Merged <-merge(DailyActivity, DailySleep, by = c("Id", "date"))
+glimpse(Activity_Sleep_Merged)
+```
+## The objective:
+
+-To analyse trends of the users of FitBit products to determine if it can help us in building BellaBeats's marketing strategy.
+
+## Correlation between Calories Vs. TrackerDistance
+
+```{r}
+ggplot(data = Activity_Sleep_Merged, aes(x = TrackerDistance, y = Calories)) +
+  geom_point() + geom_smooth(color = "maroon") +
+ labs(title = "Calories Vs. TrackerDistance")
+
+```
+
+- Based on the graph, it appears that there is a positive correlation between tracker distance and calories burned. This means that as the distance covered by the consumer using the tracker increases, the number of calories burned also tends to increase. This could be seen as a good insight suggesting that higher energy expenditure, as indicated by greater distance covered, leads to a higher number of calories burned. This relationship could be valuable for individuals looking to burn more calories and improve their overall fitness or weight loss goals. 
+
+- leveraging the insight of the positive correlation between tracker distance and calories burned can be valuable for marketing fitness-related products, and it can help attract and engage consumers who are interested in optimizing their calorie burn during physical activity.
+However, it's important to note that correlation does not necessarily imply causation, and there may be other factors at play that could be influencing this relationship.Further research and analysis has been done below. Let's dig into it.  
+
+## Comparison between types of average active minutes
+
+-Firstly, I am summarizing the active minutes data to determine the leading activity type, and transforming it into a long format in order to create a bar graph for comparison.
+
+```{r}
+# Calculate the average of minutes for each aesthetic
+Average_Active_Minutes_data <- Activity_Sleep_Merged %>%
+  summarize(
+    Average_VeryActiveMinutes = mean(VeryActiveMinutes),
+    Average_FairlyActiveMinutes = mean(FairlyActiveMinutes),
+    Average_LightlyActiveMinutes = mean(LightlyActiveMinutes),
+    Average_SedentaryMinutes = mean(SedentaryMinutes)
+  )
+
+# Convert summarized_data to long format
+Average_Active_long_minutes <- Average_Active_Minutes_data %>%
+  pivot_longer(cols = starts_with("Average_"), 
+               names_to = "ActivityType", 
+               values_to = "AverageMinutes")
+
+```
+Let's compare the average minutes spent in very active, fairly active, lightly active, and sedentary activities, and create a graph to visualize the data: 
+
+```{r}
+ ggplot(data = Average_Active_long_minutes, aes(x = AverageMinutes, y = ActivityType, fill = ActivityType)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Average No. of Minutes by Activity Type", x = "Average Minutes", y = "Activity Type") +
+  scale_fill_discrete(name = "Activity Type") +
+  theme_minimal() +
+  coord_flip() +
+  geom_text(aes(label = round(AverageMinutes, 2)), angle = 0, hjust = 0.5) +
+  theme(axis.text.x = element_blank())
+
+
+```
+
+-The data reveals that consumers on average spend the most minutes in sedentary activities, indicating a predominantly sedentary lifestyle which may need improvement for better health benefits. Notably, the Average_VeryActiveMinutes exceed the Average_FairlyActiveMinutes, suggesting that consumers tend to engage in more intense workouts rather than moderate ones. This positive trend indicates that consumers are inclined towards vigorous physical activity during their active minutes.
+
+## Correlation between TotalTimeInBed Vs. TotalTimeAsleep
+
+-Certainly! To gain insights into the sleep patterns of consumers, I am utilizing the Activity_Sleep_Merged dataset. Specifically, I will be examining the correlation between TotalHoursAsleep and TotalTimeInBed. To facilitate better understanding of sleep trends, I will convert TotalMinutesAsleep into TotalHoursAsleep for analysis. Let's dig into it.
+
+```{r}
+# Convert minutes to hours in Activity_Sleep_Merged data frame
+Activity_Sleep_Merged_Hours <- Activity_Sleep_Merged %>%
+  mutate(TotalhoursAsleep = TotalMinutesAsleep / 60,  # Converted TotalMinutesAsleep to hours
+         TotalTimeInBed = TotalTimeInBed / 60 , # Converted TotalTimeInBed to hours
+         SedentaryHours = SedentaryMinutes / 60)  # Converted SedentaryMinutes to hours
+     
+
+ggplot(data = Activity_Sleep_Merged_Hours, aes(x = TotalTimeInBed, y = TotalhoursAsleep)) +
+  geom_point(color = "black") + geom_smooth(color = "purple") +
+ labs(title = "TotalTimeInBed Vs. TotalhoursAsleep")
+```
+- The analysis indicates a positive correlation between TotalHoursAsleep and TotalTimeInBed, suggesting that people tend to sleep while they are in bed, indicating a healthy sleep pattern. This finding underscores the potential health benefits of using a fitness tracker to monitor and improve one's sleep quality. By tracking sleep duration and time spent in bed, users can gain insights into their sleep patterns and make informed decisions to optimize their sleep health. Proper sleep is crucial for overall well-being and can positively impact an individual's physical and mental health. With this information, a fitness tracker can serve as a valuable tool in promoting healthy sleep habits, leading to improved health outcomes and enhanced quality of life.
+
+Let's dig little further for for deeper insights related to sleep:
+
+## Correlation between SedentaryHours Vs. TotalHoursAsleep
+I have created a graph that correlates Total Hours Asleep with Sedentary Hours to better understand the sleep pattern and sedentary time of the consumer.
+
+```{r}
+ggplot(data = Activity_Sleep_Merged_Hours, aes(x = TotalhoursAsleep, y = SedentaryHours)) +
+  geom_point(color = "black") + geom_smooth(color = "violet") +
+ labs(title = "SedentaryHours Vs.TotalHoursAsleep ")
+```
+-The negative correlation between sedentary hours and sleep duration suggests that higher sedentary hours or less exercise may lead to reduced sleep. This supports the notion that exercise can impact sleeping patterns. The graph reveal that as sedentary hours decrease, there is an improvement in sleep quality.
+
+-This information can be useful for fitness tracker marketing as it can highlight the importance of regular exercise in promoting healthy sleep patterns. It can be emphasized that reducing sedentary behavior and engaging in physical activity may positively impact sleep duration and quality. This can be a compelling selling point for fitness trackers, as they can provide users with data and insights on their sedentary behavior and encourage them to adopt healthier habits.
+
+## Comparion between StepTotal Vs. time
+Now Let's see the when people are more physical activity through out the day:
+
+```{r}
+ggplot(data = HourlySteps, aes(x = StepTotal, y = time)) +
+  geom_histogram(stat = "identity", position = "dodge") +
+  labs(title = "Active Frequency of Consumers Through Out The Day", x = "Step Total", y = "Time") +
+  theme(legend.position = "none")
+
+```
+
+- This graph presents intriguing insights, revealing that the most active hours for consumers occur around 14:00:00 (2 PM).
+
+- The data suggests that consumers tend to be more physically active in the afternoon compared to the morning, which aligns with common patterns of daily activity.
+
+-These findings provide valuable information about when consumers are most active during the day, which can help in planning and optimizing exercise routines.
+
+-With this data, fitness trackers can provide users with personalized insights on their most active hours, helping them better understand their activity patterns and make informed decisions for their health."
+
+- By tracking and analyzing consumer activity throughout the day, fitness trackers can encourage users to be more active during periods of lower activity and maximize their physical activity during peak hours. 
+
+## Comparision Between Tracker Distance Covered
+Let's compare the total distance covered, including Very Active Distance, Moderate Active Distance, and Light Active Distance.Let's calculate the total distance covered in each of these activity categories over a longer period of time to analyze the data: 
+
+```{r}
+# Calculate the sum of Distance for each aesthetic
+summarized_Active_Distance_data <- DailyActivity %>%
+  summarize(
+    Total_VeryActiveDistance = sum(VeryActiveDistance),
+    Total_ModerateyActiveDistance = sum(ModeratelyActiveDistance),
+    Total_LightActiveDistance = sum(LightActiveDistance)
+   )
+# Convert summarized_Active_Minutes_data to long format
+summarized_Distance_data_long <- summarized_Active_Distance_data %>%
+  pivot_longer(cols = starts_with("Total_"), 
+               names_to = "DistanceType", 
+               values_to = "TotalDistance")
+
+```
+
+Using a pie chart will enable us to visually compare and contrast the proportions of Very Active Distance, Moderate Active Distance, and Light Active Distance in the Tracker Distance data, helping us identify any significant differences or trends:
+
+```{r}
+
+ggplot(data = summarized_Distance_data_long, aes(x = "", y = TotalDistance, fill = DistanceType)) +
+  geom_bar(stat = "identity", width = 1) +
+  coord_polar(theta = "y") +
+  theme_void() +
+  theme(legend.position = "left", legend.direction = "vertical", legend.justification = "center", legend.box.just = "top", legend.box.background = element_blank()) +
+  labs(title = "Active Distance Types of Tracker Distance", fill = "Active Distance Type") +
+  guides(fill = guide_legend(reverse = TRUE)) +
+  scale_fill_discrete(name = "") +
+  theme(plot.title = element_text(hjust = 0.5, size = 14),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 10),
+        legend.key.size = unit(0.7, "cm")) +
+  coord_polar(theta = "y") +
+  geom_text(aes(label = round(TotalDistance, 2)), position = position_stack(vjust = 0.5), size = 3)
+
+
+
+```
+
+-Based on the graph, it appears that the distance covered by consumers who are very active is higher than those who are moderately active. This suggests that users of the fitness tracking app and gadgets are either covering very light distances or very high distances. This is a positive indication that the total distance covered by very active minutes constitutes more than half of the total tracker distance, showcasing the effectiveness of the app and gadgets in promoting physical activity.     
+
+-It suggests that the app and gadgets are motivating users to engage in high levels of physical activity, which can have numerous health benefits, such as improving cardiovascular fitness, increasing calorie burn, and enhancing overall physical well-being.
+
+
+
+1. What are some trends in smart device usage?
+2. How could these trends apply to Bellabeat customers?
+3. How could these trends help influence Bellabeat marketing strategy?
+
+
+1. A clear summary of the business task
+2. A description of all data sources used
+3. Documentation of any cleaning or manipulation of data
+4. A summary of your analysis
+5. Supporting visualizations and key findings
+6. Your top high-level content recommendations based on your analysis
+
+
+## Some trends in smart device usage based on the analysis include:
+-Consumers engage in more intense workouts (Average_VeryActiveMinutes exceed Average_FairlyActiveMinutes).
+
+-There is a positive correlation between TotalHoursAsleep and TotalTimeInBed, indicating a healthy sleep pattern.
+
+-Sedentary hours are negatively correlated with sleep duration, suggesting that higher sedentary hours may lead to reduced sleep.
+
+-Consumers tend to be more physically active in the afternoon compared to the morning (most active hours around 2 PM).
+
+-Distance covered by very active users is higher than moderately active users, indicating the effectiveness of the app and gadgets in promoting physical activity.
+
+-These trends could apply to Bellabeat customers as they provide insights into consumer behavior related to physical activity, sleep, and sedentary behavior. Bellabeat could leverage these insights to understand their target audience's preferences, interests, and needs, and tailor their products and marketing strategies accordingly.
+
+## These trends could help influence Bellabeat's marketing strategy in several ways:
+
+-Highlighting the effectiveness of their app and gadgets in promoting physical activity, improving sleep patterns, and overall well-being.
+
+-Emphasizing the importance of regular exercise in promoting healthy sleep patterns and reducing sedentary behavior.
+
+-Providing personalized insights on most active hours to help users optimize their exercise routines.
+
+-Using data on intense workouts and distance covered by very active users to showcase the health benefits of using Bellabeat products.
+
+-Leveraging the positive correlation between tracker distance and calories burned to attract and engage consumers interested in optimizing their calorie burn during physical activity.
+
+## Business task summary:
+
+The analysis of the data indicates trends such as the positive correlation between tracker distance and calories burned, consumers' predominantly sedentary lifestyle, the impact of exercise on sleep patterns, consumers' most active hours during the day, and the effectiveness of Bellabeat's app and gadgets in promoting physical activity. These trends can be used to better understand Bellabeat customers' behavior, preferences, and needs, and inform marketing strategies that target consumers interested in optimizing their calorie burn, improving sleep quality, and adopting healthier habits. 
+
+## Data sources used: 
+The data used for analysis includes information on tracker distance, very active minutes, fairly active minutes, sedentary hours, sleep duration, time in bed, and most active hours, obtained from a fitness tracking app or gadgets used by consumers.
+
+##Data cleaning or manipulation: 
+The data has been analyzed for trends and correlations, and visualizations have been created to illustrate key findings. data cleaning or manipulation is provided in the given content .
+
+##Summary of analysis: 
+The analysis reveals trends related to physical activity, sleep, and sedentary behavior among consumers using a fitness tracking app or gadgets. These trends include consumer preferences for intense workouts, healthy sleep patterns, afternoon activity peaks, and effectiveness of the app and gadgets in promoting physical activity. There are also correlations between sedentary behavior and sleep duration, as well as distance covered by different activity levels. These findings can inform Bellabeat's marketing strategy to highlight the health benefits of their products and provide personalized insights to users.
+
+## Supporting visualizations and key findings:
+The content mentions graphs that illustrate trends such as most active hours during the day, distance covered by different activity levels, and correlation between sedentary hours and sleep duration. However, specific visualizations or key findings are not provided in the given content.
+
+## Top high-level content recommendations based on the analysis:
+
+-Emphasize the effectiveness of Bellabeat products in promoting physical activity, improving sleep patterns, and overall well-being.
+
+-Highlight the importance of regular exercise in promoting healthy sleep patterns and reducing sedentary behavior.
+
+-Provide personalized insights on most active hours to help users optimize their exercise routines.
+
+-Showcase the health benefits of using Bellabeat products through data on intense workouts and distance covered by very active users.
+
+-Leverage the positive correlation between tracker distance and calories burned to attract and engage consumers interested in optimizing their calorie burn during physical activity.
+
+
+
+
+
+
+
+
+
+
+
