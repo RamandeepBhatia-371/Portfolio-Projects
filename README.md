@@ -4,7 +4,7 @@
 This is a COVID-19 Analysis project that provides an analysis of the COVID-19 pandemic using SQL. The project utilizes SQL queries and CTE's to analyze and visualize various aspects of the pandemic, including the spread of the virus, its impact on different populations, and trends over time. The project includes SQL scripts, data, and documentation to support reproducibility and transparency. Please check this link for Viz. on Tableau : https://public.tableau.com/app/profile/ramandeep.bhatia/viz/CovidCasesDashboard_16581942656400/Dashboard3
 - Project Overview
 - Data Sources
-- Analysis
+- Datail Analysis
 ### Project Overview
 The COVID-19 Analysis project aims to provide insights into the ongoing pandemic by analyzing data related to the spread and impact of the COVID-19 virus using SQL. The project uses SQL as the primary query language to query and analyze data from various sources, including global and regional COVID-19 datasets, population demographics, and other relevant data.
 
