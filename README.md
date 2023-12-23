@@ -1,7 +1,7 @@
 # Portfolio-Projects-Data-Science
 ![Alt Text](https://media.giphy.com/media/DS89v1NqpzCqA/giphy.gif)
 ## Project 1. COVID-19 Analysis (Using SQL and Tableau BI)
-This is a COVID-19 Analysis project that provides an analysis of the COVID-19 pandemic using SQL. Project utilizes SQL queries and CTE's to analyze and visualize various aspects of the pandemic, including the spread of the virus, it's impact on different populations, and trends over time. The project includes SQL scripts, the data, and the documentation to support reproducibility and transparency. Please check this link for Viz. on Tableau : https://public.tableau.com/app/profile/ramandeep.bhatia/viz/CovidCasesDashboard_16581942656400/Dashboard3
+This is a COVID-19 Analysis project that provides an analysis of the COVID-19 pandemic using SQL. The project utilizes SQL queries and CTE's to analyze and visualize various aspects of the pandemic, including the spread of the virus, it's impact on different populations, and trends over time. The project includes SQL scripts, the data, and the documentation to support reproducibility and transparency. Please check this link for Viz. on Tableau : https://public.tableau.com/app/profile/ramandeep.bhatia/viz/CovidCasesDashboard_16581942656400/Dashboard3
 - Project Overview
 - Data Sources
 - Datail Analysis
